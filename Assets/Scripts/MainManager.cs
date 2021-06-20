@@ -11,6 +11,7 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text HighScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -40,6 +41,8 @@ public class MainManager : MonoBehaviour
         }
         playerName = ReadInput.Instance.playerName;
         ScoreText.text = "Press Space to Start!";
+        HighScoreText.text = "High Score: " + ReadInput.Instance.highScore;
+        
     }
 
     private void Update()
@@ -62,6 +65,11 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                if (scoreOnGameOver > ReadInput.Instance.highScore)
+                {
+                    HighScoreText.text = "High Score: " + scoreOnGameOver;
+                    ReadInput.Instance.GetFinalScore(scoreOnGameOver);
+                }
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
