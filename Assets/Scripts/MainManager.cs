@@ -15,9 +15,11 @@ public class MainManager : MonoBehaviour
     
     private bool m_Started = false;
     private int m_Points;
+    public static int scoreOnGameOver;
     
     private bool m_GameOver = false;
-
+    private string playerName;
+ 
     
     // Start is called before the first frame update
     void Start()
@@ -36,6 +38,8 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+        playerName = ReadInput.Instance.playerName;
+        ScoreText.text = "Press Space to Start!";
     }
 
     private void Update()
@@ -51,6 +55,7 @@ public class MainManager : MonoBehaviour
 
                 Ball.transform.SetParent(null);
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
+                ScoreText.text = playerName + "'s Score : " + m_Points;
             }
         }
         else if (m_GameOver)
@@ -65,12 +70,14 @@ public class MainManager : MonoBehaviour
     void AddPoint(int point)
     {
         m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        ScoreText.text = playerName + "'s Score : " + m_Points;
     }
 
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        scoreOnGameOver = m_Points;
+        ReadInput.Instance.GetFinalScore(scoreOnGameOver);
     }
 }
